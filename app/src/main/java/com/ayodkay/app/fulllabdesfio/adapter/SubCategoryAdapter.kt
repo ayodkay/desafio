@@ -1,21 +1,20 @@
 package com.ayodkay.app.fulllabdesfio.adapter
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ayodkay.app.fulllabdesfio.R
-import com.ayodkay.app.fulllabdesfio.activity.SubCategories
-import com.ayodkay.app.fulllabdesfio.model.SubCategoryModel
-import java.util.ArrayList
+import com.ayodkay.app.fulllabdesfio.database.Categories
 
-class SubCategoryAdapter internal constructor(private val context: Context, private val allCategory: ArrayList<SubCategoryModel>):
+class SubCategoryAdapter internal constructor(private val context: Context):
     RecyclerView.Adapter<SubCategoryAdapter.CategoryModels>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
+
+    private var allCategory = emptyList<Categories>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryModels {
         val itemView = inflater.inflate(R.layout.sub_categories_item,parent,false)
@@ -30,14 +29,17 @@ class SubCategoryAdapter internal constructor(private val context: Context, priv
     }
 
     override fun onBindViewHolder(holder: CategoryModels, position: Int) {
-        holder.itemName.text = allCategory[position].name
-
-        holder.itemName.setOnClickListener {
-            context.startActivity(Intent(context,SubCategories::class.java))
-        }
+         allCategory[position].subCategoryName.forEach {
+             holder.itemName.text = it
+         }
     }
 
     inner class CategoryModels(itemView: View): RecyclerView.ViewHolder(itemView){
         val itemName : TextView = itemView.findViewById(R.id.sub_category_name)
+    }
+
+    internal fun setCategory(allCategory: List<Categories>){
+        this.allCategory = allCategory
+        notifyDataSetChanged()
     }
 }

@@ -1,4 +1,4 @@
-package com.ayodkay.app.fulllabdesfio.database
+package com.ayodkay.app.fulllabdesfio.database.category
 
 import android.content.Context
 import androidx.room.Database

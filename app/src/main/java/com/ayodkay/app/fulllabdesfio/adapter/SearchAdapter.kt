@@ -42,7 +42,7 @@ class SearchAdapter internal constructor(private val context: Context, private v
         holder.itemName.text = allCategory[position].productName
         holder.itemPrice.text = allCategory[position].productPrice
         holder.itemPaymentOption.text = allCategory[position].productPaymentOption
-        Picasso.get().load(allCategory[position].productName).into(holder.itemIcon)
+        Picasso.get().load(allCategory[position].productImage).into(holder.itemIcon)
     }
 
     inner class CategoryModels(itemView: View): RecyclerView.ViewHolder(itemView){

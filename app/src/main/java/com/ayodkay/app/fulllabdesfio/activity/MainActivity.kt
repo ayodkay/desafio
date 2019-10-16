@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.android.volley.Response
@@ -28,8 +29,6 @@ class MainActivity : AppCompatActivity() {
             adapter = SearchAdapter(this@MainActivity,makeSearchRequest())
         }
 
-        makeSearchRequest()
-
         menu.setOnClickListener {
             startActivity(Intent(this,CategoryActivity::class.java))
         }
@@ -51,7 +50,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    product.text = ""
                     return true
                 }
 
@@ -80,7 +78,6 @@ class MainActivity : AppCompatActivity() {
                         var price :String? = null
                         var image : String? = null
 
-
                         val cat = categories.getJSONObject(i)
                         val skus = cat.getJSONArray("Skus")
                         for(Skus in 0 until skus.length()){
@@ -94,16 +91,14 @@ class MainActivity : AppCompatActivity() {
                             val imageArray = subCat.getJSONArray("Images")
                             for (images in 0 until imageArray.length()){
                                 val imageobj  = imageArray.getJSONObject(images)
-                                image = imageobj.getString("ImageUrl")
+                                image = imageobj.getString("ImageTag")
                             }
-
-
-                           searchList.add(i, SearchModel(name,price!!,image!!))
                         }
+                        searchList.add(SearchModel(name!!,price!!,image!!))
                     }
                 }
             },
-            Response.ErrorListener { product.text = "That didn't work!" }){
+            Response.ErrorListener { Toast.makeText(this@MainActivity, it.message,Toast.LENGTH_LONG).show()}){
 
             override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
@@ -122,6 +117,9 @@ class MainActivity : AppCompatActivity() {
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest)
+
+
+        Log.d("testSearchList", searchList.toString())
 
         return searchList
     }

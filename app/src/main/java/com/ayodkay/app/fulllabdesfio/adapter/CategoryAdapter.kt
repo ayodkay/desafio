@@ -2,21 +2,14 @@ package com.ayodkay.app.fulllabdesfio.adapter
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.Response
-import com.android.volley.toolbox.*
 import com.ayodkay.app.fulllabdesfio.R
-import com.ayodkay.app.fulllabdesfio.activity.CategoryActivity
 import com.ayodkay.app.fulllabdesfio.activity.SubCategories
-import com.ayodkay.app.fulllabdesfio.database.Categories
-import com.ayodkay.app.fulllabdesfio.model.CategoryModel
-import org.json.JSONObject
-import java.util.ArrayList
+import com.ayodkay.app.fulllabdesfio.database.category.Categories
 
 class CategoryAdapter internal constructor(private val context: Context):
     RecyclerView.Adapter<CategoryAdapter.CategoryModels>() {

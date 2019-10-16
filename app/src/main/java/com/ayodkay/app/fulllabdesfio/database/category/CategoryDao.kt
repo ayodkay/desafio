@@ -1,7 +1,8 @@
-package com.ayodkay.app.fulllabdesfio.database
+package com.ayodkay.app.fulllabdesfio.database.category
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.ayodkay.app.fulllabdesfio.database.category.Categories
 
 @Dao
 interface CategoryDao {

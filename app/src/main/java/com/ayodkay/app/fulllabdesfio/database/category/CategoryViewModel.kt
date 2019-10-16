@@ -1,9 +1,12 @@
-package com.ayodkay.app.fulllabdesfio.database
+package com.ayodkay.app.fulllabdesfio.database.category
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.ayodkay.app.fulllabdesfio.database.category.Categories
+import com.ayodkay.app.fulllabdesfio.database.category.CategoryDatabase
+import com.ayodkay.app.fulllabdesfio.database.category.CategoryRepo
 import kotlinx.coroutines.launch
 
 class CategoryViewModel(application: Application) : AndroidViewModel(application) {

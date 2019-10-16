@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ayodkay.app.fulllabdesfio.R
 import com.ayodkay.app.fulllabdesfio.adapter.SubCategoryAdapter
-import com.ayodkay.app.fulllabdesfio.database.CategoryViewModel
+import com.ayodkay.app.fulllabdesfio.database.category.CategoryViewModel
 import kotlinx.android.synthetic.main.activity_sub_categories.*
 
 class SubCategories : AppCompatActivity() {

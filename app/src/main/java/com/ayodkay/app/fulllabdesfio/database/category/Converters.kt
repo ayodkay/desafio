@@ -1,4 +1,4 @@
-package com.ayodkay.app.fulllabdesfio.database
+package com.ayodkay.app.fulllabdesfio.database.category
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

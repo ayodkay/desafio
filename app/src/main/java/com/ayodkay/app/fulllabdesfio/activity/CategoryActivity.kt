@@ -12,8 +12,8 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.ayodkay.app.fulllabdesfio.R
 import com.ayodkay.app.fulllabdesfio.adapter.CategoryAdapter
-import com.ayodkay.app.fulllabdesfio.database.Categories
-import com.ayodkay.app.fulllabdesfio.database.CategoryViewModel
+import com.ayodkay.app.fulllabdesfio.database.category.Categories
+import com.ayodkay.app.fulllabdesfio.database.category.CategoryViewModel
 import com.ayodkay.app.fulllabdesfio.model.CategoryModel
 import kotlinx.android.synthetic.main.activity_categories.*
 import org.json.JSONObject
@@ -81,7 +81,12 @@ class CategoryActivity : AppCompatActivity() {
                         subArray.add(subName)
                     }
 
-                    categoryViewModel.insert(Categories(name,subArray))
+                    categoryViewModel.insert(
+                        Categories(
+                            name,
+                            subArray
+                        )
+                    )
                 }
             },
             Response.ErrorListener {error -> Log.d("Category Adapter","Response error: ${error.message}") }){

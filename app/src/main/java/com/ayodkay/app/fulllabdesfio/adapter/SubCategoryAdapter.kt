@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ayodkay.app.fulllabdesfio.R
-import com.ayodkay.app.fulllabdesfio.database.Categories
+import com.ayodkay.app.fulllabdesfio.database.category.Categories
 
 class SubCategoryAdapter internal constructor(private val context: Context,val current_position: Int):
     RecyclerView.Adapter<SubCategoryAdapter.CategoryModels>() {

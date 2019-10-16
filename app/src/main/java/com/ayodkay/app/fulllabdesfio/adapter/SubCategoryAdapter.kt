@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ayodkay.app.fulllabdesfio.R
 import com.ayodkay.app.fulllabdesfio.database.Categories
 
-class SubCategoryAdapter internal constructor(private val context: Context):
+class SubCategoryAdapter internal constructor(private val context: Context,val current_position: Int):
     RecyclerView.Adapter<SubCategoryAdapter.CategoryModels>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -25,13 +25,13 @@ class SubCategoryAdapter internal constructor(private val context: Context):
         if (allCategory.isNullOrEmpty()){
             return 0
         }
-        return allCategory.size
+        return allCategory[current_position].subCategoryName.size
     }
 
     override fun onBindViewHolder(holder: CategoryModels, position: Int) {
-         allCategory[position].subCategoryName.forEach {
-             holder.itemName.text = it
-         }
+      val  x=  allCategory[current_position].subCategoryName
+
+       holder.itemName.text = x[position]
     }
 
     inner class CategoryModels(itemView: View): RecyclerView.ViewHolder(itemView){

@@ -44,6 +44,7 @@ class CategoryAdapter internal constructor(private val context: Context):
             context.startActivity(Intent(context,SubCategories::class.java).apply {
 
                 putExtra("categoryName",allCategory[position].categoryName)
+                putExtra("position",position)
             })
         }
     }
@@ -51,7 +52,6 @@ class CategoryAdapter internal constructor(private val context: Context):
     inner class CategoryModels(itemView: View): RecyclerView.ViewHolder(itemView){
         val itemName : TextView = itemView.findViewById(R.id.category_name)
     }
-
 
     internal fun setCategory(allCategory: List<Categories>){
         this.allCategory = allCategory

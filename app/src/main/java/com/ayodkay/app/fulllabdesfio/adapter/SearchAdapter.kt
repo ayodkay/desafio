@@ -17,6 +17,7 @@ import com.ayodkay.app.fulllabdesfio.R
 import com.ayodkay.app.fulllabdesfio.activity.SubCategories
 import com.ayodkay.app.fulllabdesfio.model.CategoryModel
 import com.ayodkay.app.fulllabdesfio.model.SearchModel
+import com.squareup.picasso.Picasso
 import org.json.JSONObject
 import java.util.ArrayList
 
@@ -39,9 +40,9 @@ class SearchAdapter internal constructor(private val context: Context, private v
 
     override fun onBindViewHolder(holder: CategoryModels, position: Int) {
         holder.itemName.text = allCategory[position].productName
-        holder.itemIcon.setImageBitmap(allCategory[position].productImage)
         holder.itemPrice.text = allCategory[position].productPrice
         holder.itemPaymentOption.text = allCategory[position].productPaymentOption
+        Picasso.get().load(allCategory[position].productName).into(holder.itemIcon)
     }
 
     inner class CategoryModels(itemView: View): RecyclerView.ViewHolder(itemView){

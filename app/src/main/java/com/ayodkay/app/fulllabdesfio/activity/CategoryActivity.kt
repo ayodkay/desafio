@@ -47,8 +47,10 @@ class CategoryActivity : AppCompatActivity() {
 
         categoryViewModel.allCategory.observe(this, Observer { category ->
             category?.let { adapter.setCategory(it)
+
+                makeRequest()
                 if(it.isEmpty()){
-                    makeRequest()
+
                 }
             }
         })
@@ -72,16 +74,14 @@ class CategoryActivity : AppCompatActivity() {
                     val cat = categories.getJSONObject(i)
                     val name = cat.getString("Name")
                     val subCategories = cat.getJSONArray("SubCategories")
+                    val subArray : ArrayList<String> = ArrayList()
                     for (j in 0 until subCategories.length()) {
                         val subCat = subCategories.getJSONObject(j)
                         val subName = subCat.getString("Name")
-
-                        val subArray : ArrayList<String> = ArrayList()
-
                         subArray.add(subName)
-
-                        categoryViewModel.insert(Categories(name,subArray))
                     }
+
+                    categoryViewModel.insert(Categories(name,subArray))
                 }
             },
             Response.ErrorListener {error -> Log.d("Category Adapter","Response error: ${error.message}") }){

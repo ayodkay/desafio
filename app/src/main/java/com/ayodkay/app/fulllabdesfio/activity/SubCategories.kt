@@ -20,10 +20,11 @@ class SubCategories : AppCompatActivity() {
 
         category_name.text = intent.extras!!["categoryName"] as String
 
+        val position = intent.extras!!["position"] as Int
+
         categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel::class.java)
 
-        val adapter = SubCategoryAdapter(this)
-
+        val adapter = SubCategoryAdapter(this,position)
 
         sub_category_recycler.apply {
             layoutManager = LinearLayoutManager(this@SubCategories)

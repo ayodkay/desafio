@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Categories">
+    tools:context=".activity.Categories">
 
 
     <androidx.cardview.widget.CardView
@@ -19,6 +19,7 @@
             android:padding="10dp">
 
             <ImageView
+                android:id="@+id/category_back_bt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -46,6 +47,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/category_list_item">
+
+
 
     </androidx.recyclerview.widget.RecyclerView>
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#ffffff"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -45,17 +45,18 @@
             </ImageView>
 
 
-            <ImageView
+            <androidx.appcompat.widget.SearchView
                 android:id="@+id/search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="18dp"
-                android:src="@drawable/ic_search"
+                app:searchIcon="@drawable/ic_search"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/cart"
                 app:layout_constraintTop_toTopOf="parent">
 
-            </ImageView>
+            </androidx.appcompat.widget.SearchView>
+
 
             <ImageView
                 android:id="@+id/cart"
@@ -84,6 +85,7 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:id="@+id/product"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/produtos"
@@ -100,10 +102,13 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/product_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:listitem="@layout/list_item">
+
+
 
     </androidx.recyclerview.widget.RecyclerView>
 

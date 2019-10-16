@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SubCategories">
+    tools:context=".activity.SubCategories">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -26,6 +26,7 @@
             </ImageView>
 
             <TextView
+                android:id="@+id/category_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
@@ -41,7 +42,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/sub_category_item"
+        android:id="@+id/sub_category_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/sub_categories_item">

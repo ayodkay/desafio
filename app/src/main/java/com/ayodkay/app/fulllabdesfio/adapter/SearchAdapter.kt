@@ -11,7 +11,7 @@ import com.ayodkay.app.fulllabdesfio.R
 import com.ayodkay.app.fulllabdesfio.database.search.Search
 import com.squareup.picasso.Picasso
 
-class SearchAdapter internal constructor(private val context: Context):
+class SearchAdapter internal constructor(context: Context):
     RecyclerView.Adapter<SearchAdapter.CategoryModels>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)

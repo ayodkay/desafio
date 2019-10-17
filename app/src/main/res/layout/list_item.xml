@@ -35,10 +35,9 @@
 
             <ImageView
                 android:id="@+id/item_image"
-                android:layout_width="100dp"
+                android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/rusty"
                 android:layout_gravity="center">
 
             </ImageView>
@@ -52,7 +51,6 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/roboto"
-                android:text="T shirt estampada cru"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textStyle="bold">
@@ -67,7 +65,6 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/roboto"
-                android:text="R$ 68,90"
                 android:textColor="#E53935"
                 android:textSize="14sp"
                 android:textStyle="bold">
@@ -79,9 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-
-                >
+                android:layout_marginTop="10dp">
 
                 <TextView
                     android:id="@+id/item_payment_option"
@@ -90,8 +85,7 @@
                     android:textSize="12sp"
                     android:fontFamily="@font/roboto"
                     android:textColor="#C0E53935"
-                    android:textStyle="bold"
-                    android:text="2x de r$ 34,45">
+                    android:textStyle="bold">
                 </TextView>
 
             </LinearLayout>

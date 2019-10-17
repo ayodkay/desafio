@@ -5,7 +5,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.ayodkay.app.fulllabdesfio.database.category.CategoryDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -43,14 +42,6 @@ abstract class SearchDatabase : RoomDatabase() {
                     // return instance
                     instance
                 }
-        }
-
-        fun deleteDatabase(context: Context,
-                           scope: CoroutineScope){
-
-            return INSTANCE!!.clearAllTables()
-
-
         }
 
         private class WordDatabaseCallback(

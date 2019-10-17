@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -43,7 +44,6 @@ class MainActivity : AppCompatActivity() {
                 GridLayoutManager(this@MainActivity,2))){
 
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
-
                 makeSearchRequest(false)
             }
         }
@@ -94,12 +94,13 @@ class MainActivity : AppCompatActivity() {
 
                 if(it.isNullOrEmpty()){
                     makeSearchRequest(false)
+                }else{
+                    progress_main.visibility = View.GONE
                 }
             }
         })
 
     }
-
 
     //makes a request to given url and return a json in string format using volley
     private fun makeSearchRequest(isSearch :Boolean,queryString: String?=null){
@@ -113,12 +114,12 @@ class MainActivity : AppCompatActivity() {
 
                 if (isSearch){
                     searchViewModel.nuke()
-
+                    product.text =getString(R.string.search_result)
                 }
-                product.text =getString(R.string.search_result)
+
                 handleJson(response)
             },
-            Response.ErrorListener { Toast.makeText(this@MainActivity, it.cause.toString(),Toast.LENGTH_LONG).show()}){
+            Response.ErrorListener { Toast.makeText(this@MainActivity, it.message.toString(),Toast.LENGTH_LONG).show()}){
 
             override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
@@ -188,6 +189,4 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-    private fun loadMore(){}
 }

@@ -12,12 +12,6 @@ import com.ayodkay.app.fulllabdesfio.R
 import com.ayodkay.app.fulllabdesfio.activity.SubCategoryActivity
 import com.ayodkay.app.fulllabdesfio.database.category.Categories
 
-
-
-
-
-
-
 class CategoryAdapter internal constructor(private val context: Context):
     RecyclerView.Adapter<CategoryAdapter.CategoryModels>() {
 
@@ -25,7 +19,11 @@ class CategoryAdapter internal constructor(private val context: Context):
 
     private var allCategory = emptyList<Categories>()
 
-    private var myImageList = intArrayOf(R.drawable.ic_chevron_left_black, R.drawable.ic_favorite)
+    private var myImageList = intArrayOf(
+        R.drawable.ic_beleza, R.drawable.ic_casa,R.drawable.ic_electropotatais, R.drawable.ic_bebe,
+        R.drawable.ic_pet, R.drawable.ic_be_emotion,R.drawable.ic_viva, R.drawable.ic_modeladores_corporais,
+        R.drawable.ic_electronicos, R.drawable.ic_fitness,R.drawable.ic_saude_bem_esta, R.drawable.ic_cuisinart,
+        R.drawable.ic_hobby_lazer)
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryModels {
@@ -50,10 +48,7 @@ class CategoryAdapter internal constructor(private val context: Context):
             })
         }
 
-        //holder.itemImage.setImageResource(myImageList[position])
-
-
-
+        holder.itemImage.setImageResource(myImageList[position])
     }
 
     inner class CategoryModels(itemView: View): RecyclerView.ViewHolder(itemView){

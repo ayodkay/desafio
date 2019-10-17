@@ -1,7 +1,6 @@
 package com.ayodkay.app.fulllabdesfio.adapter
 
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ayodkay.app.fulllabdesfio.R
 import com.ayodkay.app.fulllabdesfio.database.category.Categories
 
-class SubCategoryAdapter internal constructor(private val context: Context,private val current_position: Int):
+class SubCategoryAdapter internal constructor(context: Context, private val current_position: Int):
     RecyclerView.Adapter<SubCategoryAdapter.CategoryModels>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -31,7 +30,6 @@ class SubCategoryAdapter internal constructor(private val context: Context,priva
 
     override fun onBindViewHolder(holder: CategoryModels, position: Int) {
       val  allSubCategory=  allCategory[current_position].subCategoryName
-
        holder.itemName.text = allSubCategory[position]
     }
 

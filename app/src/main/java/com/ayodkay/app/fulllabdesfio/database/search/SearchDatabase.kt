@@ -37,11 +37,20 @@ abstract class SearchDatabase : RoomDatabase() {
                                 scope
                             )
                         )
+                        .allowMainThreadQueries()
                         .build()
                     INSTANCE = instance
                     // return instance
                     instance
                 }
+        }
+
+        fun deleteDatabase(context: Context,
+                           scope: CoroutineScope){
+
+            return INSTANCE!!.clearAllTables()
+
+
         }
 
         private class WordDatabaseCallback(

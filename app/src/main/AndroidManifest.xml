@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.SubCategories"/>
+        <activity android:name=".activity.SubCategoryActivity"/>
         <activity android:name=".activity.CategoryActivity" />
         <activity android:name=".activity.MainActivity">
             <intent-filter>

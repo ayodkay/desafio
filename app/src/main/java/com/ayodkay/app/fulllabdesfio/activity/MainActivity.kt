@@ -4,106 +4,126 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Response
-import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.ayodkay.app.fulllabdesfio.R
 import com.ayodkay.app.fulllabdesfio.adapter.SearchAdapter
-import com.ayodkay.app.fulllabdesfio.model.SearchModel
+import com.ayodkay.app.fulllabdesfio.database.search.Search
+import com.ayodkay.app.fulllabdesfio.database.search.SearchViewModel
+import com.ayodkay.app.fulllabdesfio.helper.EndlessRecyclerViewScrollListener
+import com.ayodkay.app.fulllabdesfio.helper.SpacesItemDecoration
 import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONException
 import org.json.JSONObject
 
-
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var searchViewModel: SearchViewModel
+    private var scrollListener: EndlessRecyclerViewScrollListener? = null
+
+
+    private lateinit var currentQuery: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        product_recycler.apply {
-            layoutManager = GridLayoutManager(this@MainActivity,2)
-            adapter = SearchAdapter(this@MainActivity,makeSearchRequest())
+        searchViewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
+        val adapter = SearchAdapter(this@MainActivity)
+
+
+        //handles infinity scroll
+        scrollListener = object : EndlessRecyclerViewScrollListener((
+                GridLayoutManager(this@MainActivity,2))){
+
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
+
+                makeSearchRequest(false)
+            }
         }
 
+        // handles recyclerView for MainActivity
+        product_recycler.apply {
+            layoutManager = GridLayoutManager(this@MainActivity,2)
+            setAdapter(adapter)
+            addItemDecoration(SpacesItemDecoration(6))
+            addOnScrollListener(scrollListener!!)
+        }
+
+        //opens the CategoryActivity
         menu.setOnClickListener {
             startActivity(Intent(this,CategoryActivity::class.java))
         }
 
+        //makes search query and makes request from the query
         search.apply {
             setOnSearchClickListener {it.setBackgroundColor(Color.parseColor("#ffffff"))}
             setOnCloseListener { this.setBackgroundColor(Color.parseColor("#000000"))
-            false}
+                false}
 
             setOnQueryTextListener(object:androidx.appcompat.widget.SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     if (query == null){
                         return false
                     }else{
-                        makeSearchRequest(query)
+                        currentQuery = query
+                        makeSearchRequest(true,query)
+
                     }
 
                     return true
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
+                    product.text = getString(R.string.products)
                     return true
                 }
 
             })
         }
 
+        //create an observer for all search
+        searchViewModel.allSearch.observe(this, Observer { category ->
+            category?.let { adapter.setSearch(it)
+
+                if(it.isNullOrEmpty()){
+                    makeSearchRequest(false)
+                }
+            }
+        })
+
     }
 
-    fun makeSearchRequest(queryString: String?=null):ArrayList<SearchModel>{
+
+    //makes a request to given url and return a json in string format using volley
+    private fun makeSearchRequest(isSearch :Boolean,queryString: String?=null){
         val queue = Volley.newRequestQueue(this)
         val url = "https://desafio.mobfiq.com.br/Search/Criteria"
-        val searchList : ArrayList<SearchModel> = ArrayList()
 
         // Request a string response from the provided URL.
         val stringRequest =object : StringRequest(
             Method.POST, url,
             Response.Listener<String> { response ->
-                val jsonObj = JSONObject(response)
-                val categories = jsonObj.getJSONArray("Products")
 
-                if (categories.isNull(0)){
-                    Toast.makeText(this@MainActivity,"no product available",Toast.LENGTH_LONG).show()
-                }else{
-                    for(i in 0 until categories.length()){
-                        var name :String? = null
-                        var price :String? = null
-                        var image : String? = null
+                if (isSearch){
+                    searchViewModel.nuke()
 
-                        val cat = categories.getJSONObject(i)
-                        val skus = cat.getJSONArray("Skus")
-                        for(Skus in 0 until skus.length()){
-                            val subCat = skus.getJSONObject(Skus)
-                            name = subCat.getString("Name")
-                            val priceArray = subCat.getJSONArray("Sellers")
-                            for (sellers in 0 until priceArray.length()){
-                                val priceObj  = priceArray.getJSONObject(sellers)
-                                price = priceObj.getString("Price")
-                            }
-                            val imageArray = subCat.getJSONArray("Images")
-                            for (images in 0 until imageArray.length()){
-                                val imageobj  = imageArray.getJSONObject(images)
-                                image = imageobj.getString("ImageTag")
-                            }
-                        }
-                        searchList.add(SearchModel(name!!,price!!,image!!))
-                    }
                 }
+                product.text =getString(R.string.search_result)
+                handleJson(response)
             },
-            Response.ErrorListener { Toast.makeText(this@MainActivity, it.message,Toast.LENGTH_LONG).show()}){
+            Response.ErrorListener { Toast.makeText(this@MainActivity, it.cause.toString(),Toast.LENGTH_LONG).show()}){
 
             override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
                 if (queryString.isNullOrEmpty()){
-                    params["Query"] = "roupa"
+                    params["Query"] = ""
                 }else{
                     params["Query"] = queryString
                 }
@@ -117,10 +137,57 @@ class MainActivity : AppCompatActivity() {
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest)
-
-
-        Log.d("testSearchList", searchList.toString())
-
-        return searchList
     }
+
+
+    // handles the response from request made in the function above
+    private fun handleJson(response :String){
+        val jsonObj = JSONObject(response)
+        val search = jsonObj.getJSONArray("Products")
+
+        if (search.isNull(0)){
+            Toast.makeText(this@MainActivity,"no product available",Toast.LENGTH_LONG).show()
+        }else{
+            for(i in 0 until search.length()){
+                var name :String? = null
+                var price :String? = null
+                var image : String? = null
+                var paymentInstallment : String? = null
+
+                val cat = search.getJSONObject(i)
+                val skus = cat.getJSONArray("Skus")
+                for(Skus in 0 until skus.length()){
+                    val subCat = skus.getJSONObject(Skus)
+
+                    name = subCat.getString("Name")
+                    val priceArray = subCat.getJSONArray("Sellers")
+                    for (sellers in 0 until priceArray.length()){
+                        val priceObj  = priceArray.getJSONObject(sellers)
+                        price = "R$ ${priceObj.getString("Price")}"
+                        
+                       try {
+                           val paymentOptionArray = priceObj.getJSONObject("BestInstallment")
+                           val count = paymentOptionArray.getString("Count")
+                           val value = paymentOptionArray.getString("Value")
+                           if(!count.isNullOrEmpty()){
+                               paymentInstallment = "$count x de $value"
+                           }
+                       }catch (js: JSONException){
+                           continue
+                       }
+
+
+                    }
+                    val imageArray = subCat.getJSONArray("Images")
+                    val imageobj  = imageArray.getJSONObject(0)
+                    image = imageobj.getString("ImageTag")
+                }
+                searchViewModel.insert(Search(name!!,price!!,image!!,paymentInstallment))
+            }
+        }
+    }
+
+
+
+    private fun loadMore(){}
 }

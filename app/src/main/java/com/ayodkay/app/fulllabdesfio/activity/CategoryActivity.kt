@@ -2,7 +2,8 @@ package com.ayodkay.app.fulllabdesfio.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -14,7 +15,6 @@ import com.ayodkay.app.fulllabdesfio.R
 import com.ayodkay.app.fulllabdesfio.adapter.CategoryAdapter
 import com.ayodkay.app.fulllabdesfio.database.category.Categories
 import com.ayodkay.app.fulllabdesfio.database.category.CategoryViewModel
-import com.ayodkay.app.fulllabdesfio.model.CategoryModel
 import kotlinx.android.synthetic.main.activity_categories.*
 import org.json.JSONObject
 
@@ -27,11 +27,11 @@ class CategoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_categories)
 
-
         categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel::class.java)
 
         val adapter = CategoryAdapter(this)
 
+        //got back to previous activity
         category_back_bt.setOnClickListener {
             startActivity(Intent(this,MainActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP
@@ -39,57 +39,43 @@ class CategoryActivity : AppCompatActivity() {
             })
         }
 
+        //handles the recyclerView for CategoryActivity
         recycle_categories.apply {
             layoutManager = LinearLayoutManager(this@CategoryActivity)
             setAdapter(adapter)
         }
 
 
+        //create an observer for all category
         categoryViewModel.allCategory.observe(this, Observer { category ->
             category?.let { adapter.setCategory(it)
 
-                makeRequest()
                 if(it.isEmpty()){
-
+                    makeRequest()
+                }else{
+                    recycle_categories.visibility = View.VISIBLE
+                    category_progress.visibility = View.GONE
                 }
             }
         })
 
     }
 
-    private fun makeRequest(): java.util.ArrayList<CategoryModel> {
+
+    //makes a request to given url and return a json in string format using volley
+    private fun makeRequest() {
         val queue = Volley.newRequestQueue(this)
         val url = "https://desafio.mobfiq.com.br/StorePreference/CategoryTree"
-        val categoryList: java.util.ArrayList<CategoryModel> = java.util.ArrayList()
-
 
         // Request a string response from the provided URL.
         val stringRequest =object: StringRequest(
             Method.GET,url,
-            Response.Listener<String> {responses->
-                val jsonObj = JSONObject(responses!!)
-                val categories = jsonObj.getJSONArray("Categories")
-
-                for (i in 0 until categories.length()) {
-                    val cat = categories.getJSONObject(i)
-                    val name = cat.getString("Name")
-                    val subCategories = cat.getJSONArray("SubCategories")
-                    val subArray : ArrayList<String> = ArrayList()
-                    for (j in 0 until subCategories.length()) {
-                        val subCat = subCategories.getJSONObject(j)
-                        val subName = subCat.getString("Name")
-                        subArray.add(subName)
-                    }
-
-                    categoryViewModel.insert(
-                        Categories(
-                            name,
-                            subArray
-                        )
-                    )
-                }
+            Response.Listener<String> {response->
+                handleJson(response)
             },
-            Response.ErrorListener {error -> Log.d("Category Adapter","Response error: ${error.message}") }){
+            Response.ErrorListener {error ->
+                Toast.makeText(this,"Response error: ${error.cause.toString()}",
+                    Toast.LENGTH_LONG).show() }){
 
             override fun getBodyContentType(): String {
                 return "application/json; charset=utf-8"
@@ -100,7 +86,32 @@ class CategoryActivity : AppCompatActivity() {
         // Add the request to the RequestQueue.
         queue.add(stringRequest)
 
-        return categoryList
+    }
+
+
+    // handles the response from request made in the function above
+    private fun handleJson(response: String){
+
+        val jsonObj = JSONObject(response)
+        val categories = jsonObj.getJSONArray("Categories")
+
+        for (i in 0 until categories.length()) {
+            val cat = categories.getJSONObject(i)
+            val name = cat.getString("Name")
+            val subCategories = cat.getJSONArray("SubCategories")
+            val subArray : ArrayList<String> = ArrayList()
+            for (j in 0 until subCategories.length()) {
+                val subCat = subCategories.getJSONObject(j)
+                val subName = subCat.getString("Name")
+                subArray.add(subName)
+            }
+
+            categoryViewModel.insert(Categories(
+                    name,
+                    subArray
+                )
+            )
+        }
     }
 
 }

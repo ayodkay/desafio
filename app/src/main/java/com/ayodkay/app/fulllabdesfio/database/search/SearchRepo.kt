@@ -13,4 +13,8 @@ class SearchRepo(private val searchDao: SearchDao) {
     suspend fun delete(search: Search){
         searchDao.delete(search)
     }
+
+    suspend fun nukeAllTable(){
+        searchDao.nukeTable()
+    }
 }

@@ -4,7 +4,9 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-
+/**
+ * this is class is need to support arraylist type in the Categories data class
+ */
 class Converters {
     @TypeConverter
     fun fromString(value: String): ArrayList<String> {

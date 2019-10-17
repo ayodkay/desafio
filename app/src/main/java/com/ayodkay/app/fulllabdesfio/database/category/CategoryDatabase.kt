@@ -24,8 +24,6 @@ abstract class CategoryDatabase : RoomDatabase() {
             scope: CoroutineScope
         ): CategoryDatabase {
             return INSTANCE
-
-
                 ?: synchronized(this) {
                     val instance = Room.databaseBuilder(
                         context.applicationContext,

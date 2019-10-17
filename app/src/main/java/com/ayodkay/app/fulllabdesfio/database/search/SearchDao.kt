@@ -6,7 +6,7 @@ import androidx.room.*
 @Dao
 interface SearchDao {
 
-    @Query("SELECT * FROM category_table")
+    @Query("SELECT * FROM search_table")
     fun getAll(): LiveData<List<Search>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -14,5 +14,8 @@ interface SearchDao {
 
     @Delete
     suspend fun delete(search: Search)
+
+    @Query("DELETE FROM search_table")
+    suspend fun nukeTable()
 
 }

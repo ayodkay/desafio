@@ -2,4 +2,6 @@
     <string name="app_name">fulllab desfio</string>
     <string name="taco">TACO</string>
     <string name="produtos">produtos</string>
+    <string name="search_result">search result</string>
+    <string name="products">Products</string>
 </resources>
